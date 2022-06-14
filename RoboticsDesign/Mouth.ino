@@ -9,29 +9,35 @@ Servo mouth;
 int mouthTime_reset = 10; //cooldown for closing mouth
 int speakerPin = A1;
 int maxMouthAngle = 30;
+int mouthZero = 87;
 
 //int volume = 15;
 //String joke = "";
 
 //Move and talk///////////////////////////
-int vol=0;
-int i = 0;
-int k = 0;
-int printTime = 0;
 int mouthTime = 0;
 int maxLoudness = 0;
 int servoAngle = 0;
 int targetAngle = 0;
-int threshold = 300*2;
-int openMouth = 0;
+int threshold = 200;
+int powerIncrease = 2.2;
+int correctedThreshold = 0;
 bool closing = false;
-unsigned long prevTime = 0;
+unsigned long prevTimeMouth = 0;
 bool speaking = false;
+
+int mouthCooldown = 100;
+int MOUTHCOOLDOWN = 60;
+bool openMouth = false;
+int busyMouth = false;
 
 void mouthSetup(){
   // Init serial port for DFPlayer Mini
   //softwareSerial.begin(9600);
   mouth.attach(mouthPin); 
+  if(!player.begin(ss)){
+    Serial.println("error player"); 
+ }  
 
   // Start communication with DFPlayer Mini
   /*if (player.begin(softwareSerial)) {
@@ -44,98 +50,41 @@ void mouthSetup(){
 }
 
 void mouthLoop(){
-  unsigned long currTime = millis();
-  /*if(Serial.available() && MOUTH){
-    player.next();
-    Serial.read();
-    Serial.println("Next sound");
-  }*/
+  unsigned long currTimeMouth = millis();
   int analogValue = analogRead(speakerPin);
   int loudness = abs((analogValue-512)*(analogValue-512));// 3.3V: -340, 5V: -512
 
-  if(Serial.available()){
-    Serial.read();
-    Serial.read();
-    Serial.read();
-    player.next();
+  if(MOUTHSERIAL){
+    if(Serial.available()){
+      MOUTHCOOLDOWN = (Serial.read()-48) *10;
+      Serial.read();
+      Serial.read();
+      player.play(1);
+    }
   }
-  
-  //if((loudness<10000)&&(loudness>-10000)){
-    maxLoudness = max(maxLoudness, loudness);
-  //}
-  //Serial.println(loudness);
-  //Serial.print(threshold);
-  //Serial.print(",");
-  if(loudness < 50000){
-    //Serial.print(volume*100);
-    //Serial.print(",");
-    //Serial.print(analogValue);
-    //Serial.print(",");
-    if(MOUTH){
+    if(true){
     Serial.print(loudness);
     Serial.print(",");
-    Serial.println(threshold * pow(2,(volume - 15) /3));
+    Serial.print(busyMouth = !(int)(digitalRead(4)) * 300);
+    Serial.print(",");
+    Serial.println(correctedThreshold = threshold * pow(powerIncrease,(volume - 15) /3));
+    if(loudness >= correctedThreshold)
+      openMouth = true;
+   if((openMouth)&&busyMouth){
+    mouthCooldown = MOUTHCOOLDOWN;
+    mouth.write(mouthZero-(int)(float)maxMouthAngle*((float)volume/30));
+    openMouth = false;
+   }
+   
+    if(currTimeMouth - prevTimeMouth >= 10){
+      mouthCooldown-=10;
+      prevTimeMouth = currTimeMouth;
+    }
+    
+    if(mouthCooldown <= 0){
+    mouth.write(mouthZero);
     }
     //Serial.print(",");
     
   }
-  if(loudness>threshold * pow(2,(volume - 15) /3)){
-  //if(analogValue<600){
-    speaking = true;
-  }
-  if(MOUTH_MODE == 0){
-    if(int(currTime - prevTime) >= 100){
-      if(speaking){
-        if(closing == false){
-          mouth.write(85-maxMouthAngle);
-          closing = true;
-         }
-        else 
-          if(closing == true){
-            mouth.write(85);
-            closing = false;
-           }
-      }
-      else
-        mouth.write(85);
-      prevTime = currTime;
-      speaking = false;
-    }
-  }
-  if(MOUTH_MODE == 1){
-    if(speaking){
-       mouth.write(85-maxMouthAngle);
-       prevTime = millis();
-    }
-    if(int(currTime-prevTime)>100){
-        mouth.write(85);
-    }
-  }
 }
-     
-  
-  /*
-  if(printTime >= 9){ //every 9 times this is called (loop time + 1ms)
-    if((maxLoudness>threshold)&&(mouthTime == 0)){//TODO and MP3BUSY
-      mouth.write(90-maxMouthAngle);
-      //TODO maybe also nod with neck for more mouth movement?
-      mouthTime = mouthTime_reset;
-      //Serial.println(maxLoudness);
-    }
-    else{
-      if(mouthTime >= 10){
-        mouthTime -= 10;
-        //Serial.println(maxLoudness);
-      }
-      else{
-        mouthTime = 0;
-        mouth.write(90);
-        //Serial.println(maxLoudness);
-      }
-    }
-    printTime = 0;
-    maxLoudness = 0;
-  }
-  
-  
-}*/

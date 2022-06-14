@@ -2,8 +2,6 @@
 #include <DFRobotDFPlayerMini.h>
 #include "mic.h"
 
-static const uint8_t TX=7;
-static const uint8_t RX=8;
 
 int S =0;
 int DELTA=25;
@@ -25,7 +23,7 @@ long mic_th=0;
 
 
 //player
-SoftwareSerial ss(RX, TX);
+
 int speech=0;
 
 void microphoneSetup() {
@@ -36,8 +34,6 @@ void microphoneSetup() {
   
   Serial.print("Threshold=");
   //Serial.println(mic.mic_th);
-  ss.begin(9600);
-  Serial.begin(9600);
   //delay(1000);
   if(!player.begin(ss)){
     Serial.println("error player"); 
