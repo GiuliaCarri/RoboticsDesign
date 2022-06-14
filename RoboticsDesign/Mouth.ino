@@ -2,10 +2,7 @@
 #include "DFRobotDFPlayerMini.h"
 #include <Servo.h> 
 
-// MP3 and motors
-static const uint8_t PIN_MP3_TX = 7; // Connects to module's RX (giallo?)
-static const uint8_t PIN_MP3_RX = 8; // Connects to module's TX (verde?)
-SoftwareSerial softwareSerial(PIN_MP3_RX, PIN_MP3_TX);
+// MP3 and motors/
 int mouthPin = 5;
 Servo mouth;
 //DFRobotDFPlayerMini player; //pin to 3.3v
@@ -25,10 +22,10 @@ int mouthTime = 0;
 int maxLoudness = 0;
 int servoAngle = 0;
 int targetAngle = 0;
-int threshold = 300;
+int threshold = 300*2;
 int openMouth = 0;
 bool closing = false;
-int prevTime = 0;
+unsigned long prevTime = 0;
 bool speaking = false;
 
 void mouthSetup(){
@@ -37,24 +34,31 @@ void mouthSetup(){
   mouth.attach(mouthPin); 
 
   // Start communication with DFPlayer Mini
-  if (player.begin(softwareSerial)) {
+  /*if (player.begin(softwareSerial)) {
    Serial.println("OK");
     // Set volume (0 to 30).
     // TODO Play "hello" MP3 file on the SD card
   } else {
     Serial.println("Connecting to DFPlayer Mini failed!");
-  }
+  }*/
 }
 
 void mouthLoop(){
-  int currTime = millis();
-  if(Serial.available()){
+  unsigned long currTime = millis();
+  /*if(Serial.available() && MOUTH){
     player.next();
     Serial.read();
     Serial.println("Next sound");
-  }
+  }*/
   int analogValue = analogRead(speakerPin);
   int loudness = abs((analogValue-512)*(analogValue-512));// 3.3V: -340, 5V: -512
+
+  if(Serial.available()){
+    Serial.read();
+    Serial.read();
+    Serial.read();
+    player.next();
+  }
   
   //if((loudness<10000)&&(loudness>-10000)){
     maxLoudness = max(maxLoudness, loudness);
@@ -67,31 +71,45 @@ void mouthLoop(){
     //Serial.print(",");
     //Serial.print(analogValue);
     //Serial.print(",");
+    if(MOUTH){
     Serial.print(loudness);
     Serial.print(",");
-    Serial.print(threshold * pow(2,(volume - 15) /3));
-    Serial.print(",");
+    Serial.println(threshold * pow(2,(volume - 15) /3));
+    }
+    //Serial.print(",");
+    
   }
   if(loudness>threshold * pow(2,(volume - 15) /3)){
   //if(analogValue<600){
     speaking = true;
   }
-  if(currTime - prevTime >= 100){
-    if(speaking){
-      if(closing == false){
-        mouth.write(85-maxMouthAngle);
-        closing = true;
-       }
-      else 
-        if(closing == true){
-          mouth.write(85);
-          closing = false;
+  if(MOUTH_MODE == 0){
+    if(int(currTime - prevTime) >= 100){
+      if(speaking){
+        if(closing == false){
+          mouth.write(85-maxMouthAngle);
+          closing = true;
          }
+        else 
+          if(closing == true){
+            mouth.write(85);
+            closing = false;
+           }
+      }
+      else
+        mouth.write(85);
+      prevTime = currTime;
+      speaking = false;
     }
-    else
-      mouth.write(85);
-    prevTime = currTime;
-    speaking = false;
+  }
+  if(MOUTH_MODE == 1){
+    if(speaking){
+       mouth.write(85-maxMouthAngle);
+       prevTime = millis();
+    }
+    if(int(currTime-prevTime)>100){
+        mouth.write(85);
+    }
   }
 }
      
