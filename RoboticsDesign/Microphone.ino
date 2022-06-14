@@ -2,6 +2,7 @@
 #include <DFRobotDFPlayerMini.h>
 #include "mic.h"
 
+//CALLS FOR JOKES (break ice when people are silent), OR VERSES/MOVEMENTS (people speaking)
 
 int S =0;
 int DELTA=25;

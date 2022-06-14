@@ -2,6 +2,8 @@
 #include "DFRobotDFPlayerMini.h"
 #include <Servo.h> 
 
+//FIXARE VIBRAZIONE BOCCA
+
 // MP3 and motors/
 int mouthPin = 5;
 Servo mouth;
