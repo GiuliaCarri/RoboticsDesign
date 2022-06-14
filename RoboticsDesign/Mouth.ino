@@ -6,8 +6,8 @@
 int mouthPin = 5;
 Servo mouth;
 //DFRobotDFPlayerMini player; //pin to 3.3v
-int mouthTime_reset = 10; //cooldown for closing mouth
 int speakerPin = A1;
+int MOUTHCOOLDOWN = 60;
 int maxMouthAngle = 30;
 int mouthZero = 87;
 
@@ -27,7 +27,6 @@ unsigned long prevTimeMouth = 0;
 bool speaking = false;
 
 int mouthCooldown = 100;
-int MOUTHCOOLDOWN = 60;
 bool openMouth = false;
 int busyMouth = false;
 
@@ -59,7 +58,7 @@ void mouthLoop(){
       MOUTHCOOLDOWN = (Serial.read()-48) *10;
       Serial.read();
       Serial.read();
-      player.play(1);
+      player.play(35);
     }
   }
     if(true){

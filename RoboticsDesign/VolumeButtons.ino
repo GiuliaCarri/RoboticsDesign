@@ -40,7 +40,7 @@ void volumeButtonsLoop(){
     if (volume < 30)
       volume +=3;
     player.volume(volume);
-    player.play(5);
+    player.play(32);
     t=millis();
     //TODO playJoke(/*AAAAAA);
   }
@@ -49,7 +49,7 @@ void volumeButtonsLoop(){
     if(volume > 0)
       volume -=3;
     player.volume(volume);
-    player.play(5);
+    player.play(34);
     t=millis();
     //playJoke(/*AAAAAA);
   }

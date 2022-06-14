@@ -1,6 +1,8 @@
 //DFRobotDFPlayerMini player from mouth
 //TODO declare dictionary that maps joke name to number
-
+//1-15 italian jokes
+//16-30 english jokes
+//31-38 versi
 
 void jokesSetup(){
   strcpy(joke, "Hello");
