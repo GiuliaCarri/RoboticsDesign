@@ -1,5 +1,8 @@
 #include <Servo.h> 
 
+int MOVEDELAY = 0; //SPOSTARE NEL MAIN
+int SPECIFICMOVE = 0; //SPOSTARE NEL MAIN
+
 int neckSidePin = 9, neckUpPin = 6, armPin = 11;
 Servo joints[3];
 const int  neckSide = 2, neckUp = 1, arm = 0;
@@ -38,6 +41,7 @@ void movementsSetup(){
 int angles[3] = {90,90,90};
 float floatAngles[3] = {0,0,0};
 float prevTime = 0;
+float prevTimeDelay = 0;
 float prevTime10 = 0;
 int repeat = 0;
 bool playing = false;
@@ -61,27 +65,38 @@ void movementsLoop(){
     Serial.read();
     Serial.read();
   }
+  if(SPECIFICMOVE){
+    choice = SPECIFICMOVE;
+    prevTimeDelay = millis();
+    resetMovements();
+  }
   if(playing){
-    if(!ptr)
-      ptr = movements[choice];
-    if(repeat < arraySizes[choice] - 1){
-      if((currTime - prevTime10 >= 10)&&playing){
-        currAngle += float(*(ptr+1)-*ptr)/10;
-        Serial.println(currAngle); 
-        joints[neckUp].write(int(currAngle));
-        if((currTime - prevTime >= 100)){
-          repeat++;
-          ptr++;
-          prevTime = currTime;
+    if(currTime - prevTimeDelay > MOVEDELAY){ //wait to start movement
+      if(!ptr)
+        ptr = movements[choice];
+      if(repeat < arraySizes[choice] - 1){
+        if((currTime - prevTime10 >= 10)&&playing){
+          currAngle += float(*(ptr+1)-*ptr)/10;
+          Serial.println(currAngle); 
+          joints[neckUp].write(int(currAngle));
+          if((currTime - prevTime >= 100)){
+            repeat++;
+            ptr++;
+            prevTime = currTime;
+          }
+          prevTime10 = currTime;
         }
-        prevTime10 = currTime;
+      }
+      else{
+        resetMovements();
       }
     }
-    else{
-      ptr = 0;
-      currAngle = movements[choice][0];
-      playing = false;
-      repeat = 0;
-    }
   }
+}
+
+void resetMovements(){
+    ptr = 0;
+    currAngle = movements[choice][0];
+    playing = false;
+    repeat = 0;
 }

@@ -30,7 +30,7 @@ bool speaking = false;
 
 int mouthCooldown = 100;
 bool openMouth = false;
-int busyMouth = false;
+int busyMouth = 0;
 
 void mouthSetup(){
   // Init serial port for DFPlayer Mini
