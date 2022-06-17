@@ -5,16 +5,13 @@
 //FIXARE VIBRAZIONE BOCCA
 
 // MP3 and motors/
-int mouthPin = 5;
 Servo mouth;
-//DFRobotDFPlayerMini player; //pin to 3.3v
-int speakerPin = A1;
+
+
 int MOUTHCOOLDOWN = 60;
 int maxMouthAngle = 30;
 int mouthZero = 87;
 
-//int volume = 15;
-//String joke = "";
 
 //Move and talk///////////////////////////
 int mouthTime = 0;
@@ -35,10 +32,10 @@ int busyMouth = 0;
 void mouthSetup(){
   // Init serial port for DFPlayer Mini
   //softwareSerial.begin(9600);
-  mouth.attach(mouthPin); 
-  if(!player.begin(ss)){
+  mouth.attach(MOUTH_PIN); 
+  /*if(!player.begin(ss)){
     Serial.println("error player"); 
- }  
+ } */ 
 
   // Start communication with DFPlayer Mini
   /*if (player.begin(softwareSerial)) {
@@ -52,7 +49,7 @@ void mouthSetup(){
 
 void mouthLoop(){
   unsigned long currTimeMouth = millis();
-  int analogValue = analogRead(speakerPin);
+  int analogValue = analogRead(SPEAKER_PIN);
   int loudness = abs((analogValue-512)*(analogValue-512));// 3.3V: -340, 5V: -512
 
   if(MOUTHSERIAL){
@@ -66,14 +63,14 @@ void mouthLoop(){
     if(true){
     Serial.print(loudness);
     Serial.print(",");
-    Serial.print(busyMouth = !(int)(digitalRead(4)) * 300);
+    Serial.print(busyMouth = !(int)(digitalRead(BUSY_PIN)) * 300);
     Serial.print(",");
-    Serial.println(correctedThreshold = threshold * pow(powerIncrease,(volume - 15) /3));
+    Serial.println(correctedThreshold = threshold * pow(powerIncrease,(VOLUME - 15) /3));
     if(loudness >= correctedThreshold)
       openMouth = true;
-   if((openMouth)&&busyMouth){
+   if((openMouth)&&busyMouth&& digitalRead(BUSY_PIN)==0){ //AGGIUNTO CONTROLLO BUSY PIN, VEDI SE SMETTE DI TREMARE. LOW=PLAYING
     mouthCooldown = MOUTHCOOLDOWN;
-    mouth.write(mouthZero-(int)(float)maxMouthAngle*((float)volume/30));
+    mouth.write(mouthZero-(int)(float)maxMouthAngle*((float)VOLUME/30));
     openMouth = false;
    }
    

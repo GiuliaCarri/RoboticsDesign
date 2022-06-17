@@ -1,22 +1,12 @@
-#include <Servo.h> 
 
-int MOVEDELAY = 0; //SPOSTARE NEL MAIN
-int SPECIFICMOVE = 0; //SPOSTARE NEL MAIN
 
-int neckSidePin = 9, neckUpPin = 6, armPin = 11;
 Servo joints[3];
 const int  neckSide = 2, neckUp = 1, arm = 0;
 
 int armZero = 90;
 int helloMax = 180;
 int helloMin = 140;
-int hello[] = {11, 8, 7, 7, 7, 7, 7, 7, 7, 7, 12, 28, 60, 98, 117, 119, 89, 59, 86, 104, 70, 63, 104, 112, 104, 71, 40, 18, 4, 0};
-int yes[] = {106, 120, 145, 160, 151, 131, 125, 138, 145, 143, 132, 123, 132, 143, 145, 139, 133, 124, 117, 107, 95, 85, 75, 66, 63, 79, 90, 89, 85, 105, 103, 87, 79, 76, 70, 60, 44, 34, 28, 17, 12, 11};
-int arraySize(int* arr[]){ //doesn't work
-  return (int)(sizeof(arr) / sizeof(arr[0]));
-}
-int arraySizes[] = {(sizeof(hello) / sizeof(hello[0])),(sizeof(yes) / sizeof(yes[0]))}; //sizes of arrays
-int* movements[] = {hello,yes}; //arrays pointers
+
 int choice = 0;
 
 unsigned long movementStartTime = 0;
@@ -28,9 +18,9 @@ float prevValue = 0;
 
 void movementsSetup(){
   
-  joints[neckSide].attach(neckSidePin); 
-  joints[neckUp].attach(neckUpPin);
-  joints[arm].attach(armPin); 
+  joints[neckSide].attach(HEAD_NO_PIN); 
+  joints[neckUp].attach(HEAD_YES_PIN);
+  joints[arm].attach(ARM_PIN); 
   
   joints[arm].write(90); 
   joints[neckUp].write(movements[choice][0]); 

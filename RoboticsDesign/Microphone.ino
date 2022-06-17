@@ -1,57 +1,26 @@
-#include "SoftwareSerial.h"
-#include <DFRobotDFPlayerMini.h>
-#include "mic.h"
-
 //CALLS FOR JOKES (break ice when people are silent), OR VERSES/MOVEMENTS (people speaking)
+
+
 
 int S =0;
 int DELTA=25;
-int SPR=15;
+
 int TTH= 700;
 
-/*
-int nfiles;
-int t_i =0;
-int t_state=0;*/
-
 //mic
-//long t =0;
-long silence_threshold = 14000;
-long random_threshold = 16000;
-Mic mic = Mic();
+
+
+
 long mvol=0;
-long mic_th=0;
 
-
-//player
+long mm=0;
 
 int speech=0;
 
 void microphoneSetup() {
-  // put your setup code here, to run once:
   
-  //mic.dyn_th();
-  //mic_th = mic.mic_th;
-  
-  Serial.print("Threshold=");
-  //Serial.println(mic.mic_th);
-  //delay(1000);
-  if(!player.begin(ss)){
-    Serial.println("error player"); 
-   }
-  //player.volume(svol);
-  
-  player.play(5);
-  t=millis();
-  /*while(millis()-t<4000){};
-  player.stop();
-  t=millis();*/
-
-   /*
-   nfiles = player.readFileCounts();
-   Serial.println(nfiles);*/
-   
-   //player.play(t_i);
+  MIC_STATE=true;
+  t2=millis();
 
 }
 
@@ -59,11 +28,13 @@ void microphoneLoop() {
 
   // put your main code here, to run repeatedly:
 
- 
+ if(MIC_STATE==true){
+
+  
   Serial.println("ecco");
   //Serial.print(mic_th);
   //Serial.print(",");
-  Serial.print(TTH);
+  Serial.print(mic_th);
   Serial.print(",");
   //Serial.print(pow(mic_th+DELTA,2));
   //Serial.print(",");
@@ -71,30 +42,36 @@ void microphoneLoop() {
   //Serial.print(",");
   
   
-  Serial.println (abs(mic.ReadVol()));
-  mvol = mic.sVol();
-  if ((mic.ReadVol()>TTH)){
+  mm= abs(mic.ReadVol());
+  if (mm < 50000){
+    mm=50000;
+  } 
+  /*
+  uint32_t mm = mic.ReadVol();
+  if (mm<10000 && mm >-10000){Serial.println (abs(mm));}
+  mvol = mic.sVol();*/
+  //Serial.println (abs(mvol));
+  if ((mm>mic_th)){
     speech++;
     }
   //Serial.println (mvol);
-if((speech>=SPR) && ((millis()-t)> random_threshold)){//((millis()-t)> random_threshold-200) && ((millis()-t)< random_threshold+200)){
-  //Serial.println (mvol);
-  t=millis();
-  player.play(4);
-  //while(millis()-t<4000){};
-  //player.stop();
-  t=millis();
+if((speech>=SPR) && ((millis()-t2)> random_threshold)){//speaking detected
+  t2=millis();
+  NOISE=true;
+  BREAK_ICE=false;
+  MIC_STATE=false;
   speech=0;
-  //delay(500);
  }
-if((speech<SPR) && ((millis()-t)> silence_threshold)){//(millis()-t)> (silence_threshold-200) && (millis()-t)< (silence_threshold+200)){
-  //Serial.println ("please speak");
-  t=millis();
-  player.play(2);
-  //while(millis()-t<4000){};
-  //player.stop();
-  t=millis();
+ 
+if((speech<SPR) && ((millis()-t2)> silence_threshold)){//silence detected
+  t2=millis();
+  BREAK_ICE=true;
+  NOISE=false;
+  MIC_STATE=false;
   speech=0;
-  //delay(500);
   }
+
+  mic.dyn_th();
+  mic_th = mic.mic_th;
+ }
 }
