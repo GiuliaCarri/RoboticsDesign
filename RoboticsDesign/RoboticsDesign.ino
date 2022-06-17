@@ -50,6 +50,7 @@ bool MOVEMENT_STATE=false;
 void setup() {
     // Init USB serial port for debugging
     Serial.begin(9600);
+    ss.begin(9600);
     if(!player.begin(ss)){
     Serial.println("error player"); 
     }

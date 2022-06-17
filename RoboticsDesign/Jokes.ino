@@ -9,7 +9,7 @@
 
 int joke; //where we put the index of the joke to play (=> also of the array of pointers to movements)
 void jokesSetup(){
-  
+  randomSeed(analogRead(A3));
 }
 
 void jokesLoop(){

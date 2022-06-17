@@ -2,8 +2,8 @@
 
 
 
-int S =0;
-int DELTA=25;
+//int S =0;
+//int DELTA=25;
 
 int TTH= 700;
 
@@ -11,7 +11,7 @@ int TTH= 700;
 
 
 
-long mvol=0;
+//long mvol=0;
 
 long mm=0;
 
@@ -20,6 +20,8 @@ int speech=0;
 void microphoneSetup() {
   
   MIC_STATE=true;
+  mic.dyn_th();
+  mic_th = mic.mic_th;
   t2=millis();
 
 }
@@ -34,18 +36,21 @@ void microphoneLoop() {
   Serial.println("ecco");
   //Serial.print(mic_th);
   //Serial.print(",");
-  Serial.print(mic_th);
-  Serial.print(",");
+  //Serial.print(mic_th);
+  //Serial.print(",");
   //Serial.print(pow(mic_th+DELTA,2));
   //Serial.print(",");
   //Serial.print(pow(mic_th-DELTA,2));
   //Serial.print(",");
   
-  
+  /*
   mm= abs(mic.ReadVol());
   if (mm < 50000){
-    mm=50000;
-  } 
+    Serial.print(mm);}
+    else {mm=50000;
+  }*/
+   mm= mic.ReadVol();
+   //Serial.println(mm);
   /*
   uint32_t mm = mic.ReadVol();
   if (mm<10000 && mm >-10000){Serial.println (abs(mm));}
