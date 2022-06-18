@@ -17,6 +17,7 @@ unsigned long t2 = 0; //time for mic count seconds
 
 //Microphone
 bool MIC_STATE= false; //mic hears if true
+bool MICSERIAL = true;
 bool NOISE=false; //if noise detected verses
 bool BREAK_ICE= false; //jokes random if SILENCE
 int SPR=15; //Detected peaks threshold for speaking recognition
@@ -27,14 +28,18 @@ long mic_th=0; //contains mic threshold
 //Jokes
 //int SPECIFIC_MOVEMENT; //movement to do according to a verse. Possibility of delay
 int MOVEDELAY = 0; //SPOSTARE NEL MAIN
-int SPECIFICMOVE = 0; //SPOSTARE NEL MAIN
+int SPECIFICMOVE = -1; //SPOSTARE NEL MAIN
 
 //Mouth
 bool MOUTH_STATE=false;
 bool MOUTHSERIAL = false;
+bool MOUTHMONITOR = true;
+bool MOUTH_BUSY = false;
+Servo mouth;
+bool PHRASE_FINISHED = false;
 
 //Buttons
-int VOLUME =15;
+int VOLUME =3;
 
 int lang=0; //language audio dfplayer
 int NUMLANG=2; //#languages until now
@@ -45,14 +50,21 @@ int verses_init = NUMLANG*jokes_per_lang +1;
 
 //Movements
 bool MOVEMENT_STATE=false;
+bool MOVEMENTSSERIAL = false;
+bool MOVEPLAYING = false;
+bool MOVEMONITOR = false;
 
+bool PRINTROBOT = false;
 
 void setup() {
     // Init USB serial port for debugging
     Serial.begin(9600);
+    ss.begin(9600);
     if(!player.begin(ss)){
-    Serial.println("error player"); 
+      Serial.println("error player"); 
     }
+    else
+      Serial.println("Player ok"); 
 
     player.volume(VOLUME);
     player.play(lang_init); // say hello in the specific language. This will give us the initial output sound and allow to understand the language and the volume.
@@ -69,7 +81,27 @@ void loop() {
   if(millis()>= RST){
     rst();
   }
-  
+  if(PRINTROBOT){
+    Serial.print("MIC_STATE ");
+    Serial.print(MIC_STATE);
+    Serial.print("|");
+    Serial.print("NOISE ");
+    Serial.print(NOISE);
+    Serial.print("|");
+    Serial.print("BREAK_ICE ");
+    Serial.print(BREAK_ICE);
+    Serial.print("|");
+    Serial.print("VOLUME ");
+    Serial.print(VOLUME);
+    Serial.print("|");
+    Serial.print("MOUTH_STATE ");
+    Serial.print(MOUTH_STATE);
+    Serial.print("|");
+    Serial.print("SPECIFICMOVE ");
+    Serial.print(SPECIFICMOVE);
+    Serial.print("|");
+    Serial.println("|");
+  }
     mouthLoop();
     microphoneLoop();
     jokesLoop();

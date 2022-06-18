@@ -19,11 +19,13 @@ void jokesLoop(){
     joke= randomize(lang*jokes_per_lang +1, lang*jokes_per_lang + jokes_per_lang);
 
     player.play(joke);
+    SPECIFICMOVE = joke;
+    MOVEDELAY = 4000; //SPOSTARE NEL MAIN
     //fare movements
 
     t2=millis();
     NOISE=false;
-    MIC_STATE=true;
+    //MIC_STATE=true;
   }
 
   //if silence, play jokes and specific movements
@@ -35,7 +37,13 @@ void jokesLoop(){
     
     t2=millis();
     BREAK_ICE=false;
+    //MIC_STATE=true;
+  }
+  if(!MOUTH_BUSY && !MOVEPLAYING){
     MIC_STATE=true;
+  }
+  if(PHRASE_FINISHED){
+    SPECIFICMOVE = -1;//KERMIT TURN, MOUTH OPEN TO START LAUGHING ECC
   }
 }
 

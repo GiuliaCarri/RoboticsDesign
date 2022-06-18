@@ -27,7 +27,21 @@ void microphoneSetup() {
 void microphoneLoop() {
 
   // put your main code here, to run repeatedly:
-
+  if(MICSERIAL){
+    if(Serial.available()){
+      int micvalue = (Serial.read()-48);
+      Serial.read();
+      Serial.read();
+      Serial.println(micvalue);
+      if(micvalue == 1){
+        NOISE = true;
+      }
+      if(micvalue == 2){
+        BREAK_ICE = true;
+      }
+    }
+  }
+  else{
  if(MIC_STATE==true){
 
   
@@ -74,4 +88,5 @@ if((speech<SPR) && ((millis()-t2)> silence_threshold)){//silence detected
   mic.dyn_th();
   mic_th = mic.mic_th;
  }
+  }
 }
