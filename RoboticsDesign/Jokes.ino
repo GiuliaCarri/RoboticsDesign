@@ -20,7 +20,7 @@ void jokesLoop(){
 
     player.play(joke);
     SPECIFICMOVE = joke;
-    MOVEDELAY = 4000; //SPOSTARE NEL MAIN
+    MOVEDELAY = 0; //SPOSTARE NEL MAIN
     //fare movements
 
     t2=millis();
@@ -42,7 +42,7 @@ void jokesLoop(){
   if(!MOUTH_BUSY && !MOVEPLAYING){
     MIC_STATE=true;
   }
-  if(PHRASE_FINISHED){
+  if(PHRASE_FINISHED && false){
     SPECIFICMOVE = -1;//KERMIT TURN, MOUTH OPEN TO START LAUGHING ECC
   }
 }

@@ -33,7 +33,7 @@ int SPECIFICMOVE = -1; //SPOSTARE NEL MAIN
 //Mouth
 bool MOUTH_STATE=false;
 bool MOUTHSERIAL = false;
-bool MOUTHMONITOR = true;
+bool MOUTHMONITOR = false;
 bool MOUTH_BUSY = false;
 Servo mouth;
 bool PHRASE_FINISHED = false;
@@ -52,7 +52,7 @@ int verses_init = NUMLANG*jokes_per_lang +1;
 bool MOVEMENT_STATE=false;
 bool MOVEMENTSSERIAL = false;
 bool MOVEPLAYING = false;
-bool MOVEMONITOR = false;
+bool MOVEMONITOR = true;
 
 bool PRINTROBOT = false;
 
