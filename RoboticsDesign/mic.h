@@ -4,8 +4,8 @@
 //global variables
 //#define PIN 0
 #define TH_SAMPLES 100
-#define VOL_SAMPLES 1
-long tt=0;
+//#define VOL_SAMPLES 1
+//long tt=0;
 
 class Mic{
 
@@ -22,7 +22,7 @@ class Mic{
   Mic();
   void SetPin();
   long ReadVol();
-  long sVol();
+  //long sVol();
   void dyn_th();
   
   
@@ -42,10 +42,15 @@ void Mic::SetPin(){
 
 long Mic::ReadVol(){
   
-  return pow((analogRead (pin)-360),2);
+  //return pow((analogRead (pin)-360),2);
+  long sound= analogRead(pin)-360;
+  if (-50000<sound<50000)
+      return abs(sound);
+  else return 50000;
   
   }
 
+/*
 long Mic::sVol(){
 
   vol=0;
@@ -62,7 +67,7 @@ long Mic::sVol(){
    //vol = (int)vol;
    //delay(500);
    return vol; 
-}
+}*/
 
 
 void Mic::dyn_th(){
@@ -84,11 +89,13 @@ void Mic::dyn_th(){
    */
    for(int i=0; i<TH_SAMPLES; i++){
     //sread += ReadVol();
+    /*
     sread= analogRead(pin);
     if(sread<50000){
     mic_th += abs(sread);
-    } else mic_th +=50000;
+    } else mic_th +=50000;*/
     
+    mic_th += ReadVol();
     //delay(5);
     /*
     tt=millis();
@@ -98,8 +105,8 @@ void Mic::dyn_th(){
    mic_th = mic_th/TH_SAMPLES;
    
    //mic_th = pow(mic_th, 2);
-   mic_th = (long)(((float)mic_th * 2.0f)); //supposing uniform distribution of noise, *2 should be ok... 
-   mic_th = abs(mic_th); 
+   mic_th = (long)(((float)mic_th * 1.8f)); //supposing uniform distribution of noise, *1.8 should be ok (+80%) 
+   //mic_th = abs(mic_th); 
    //mic_th = pow(mic_th, 2);
 }
 
