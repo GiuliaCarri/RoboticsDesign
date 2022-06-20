@@ -3,7 +3,7 @@
 
 //global variables
 //#define PIN 0
-#define TH_SAMPLES 100
+#define TH_SAMPLES 170
 //#define VOL_SAMPLES 1
 //long tt=0;
 

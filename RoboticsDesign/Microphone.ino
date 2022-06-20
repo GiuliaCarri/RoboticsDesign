@@ -76,6 +76,7 @@ void microphoneLoop() {
   //Serial.println (mvol);
 if((speech>=SPR) && ((millis()-t2)> random_threshold)){//speaking detected
   t2=millis();
+  //Serial.println("talking");
   NOISE=true;
   BREAK_ICE=false;
   MIC_STATE=false;
@@ -84,6 +85,7 @@ if((speech>=SPR) && ((millis()-t2)> random_threshold)){//speaking detected
  
 if((speech<SPR) && ((millis()-t2)> silence_threshold)){//silence detected
   t2=millis();
+  //Serial.println("silence");
   BREAK_ICE=true;
   NOISE=false;
   MIC_STATE=false;

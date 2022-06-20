@@ -16,7 +16,7 @@ void jokesLoop(){
 
   //if noise detected, play verses and random movements
   if(NOISE){
-    joke= randomize(lang*jokes_per_lang +1, lang*jokes_per_lang + jokes_per_lang);
+    joke= randomize(verses_init, verses_init + verses_num -1);
 
     player.play(joke);
     SPECIFICMOVE = joke;
@@ -30,7 +30,8 @@ void jokesLoop(){
 
   //if silence, play jokes and specific movements
   if(BREAK_ICE){
-    joke= randomize(verses_init, verses_init + verses_num -1);
+    
+    joke= randomize(lang*jokes_per_lang +1, lang*jokes_per_lang + jokes_per_lang);
 
     player.play(joke);
     //fare movements
