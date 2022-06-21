@@ -19,7 +19,7 @@ void jokesLoop(){
     joke= randomize(verses_init, verses_init + verses_num -1);
 
     player.play(joke);
-    //SPECIFICMOVE = joke;
+    SPECIFICMOVE = 1;
     //MOVEDELAY = 0; //SPOSTARE NEL MAIN
     //fare movements
 
@@ -33,7 +33,7 @@ void jokesLoop(){
     joke= randomize(lang*jokes_per_lang +1, lang*jokes_per_lang + jokes_per_lang);
 
     player.play(joke);
-    SPECIFICMOVE = joke;
+    SPECIFICMOVE = 1;
     //fare movements
     
     
