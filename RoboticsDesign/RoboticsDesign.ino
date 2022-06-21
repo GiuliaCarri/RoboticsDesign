@@ -20,11 +20,11 @@ bool MIC_STATE= false; //mic hears if true
 bool MICSERIAL = false; //DEBUG control microphone through serial
 bool NOISE=false; //if noise detected verses
 bool BREAK_ICE= false; //jokes random if SILENCE
-int SPR=26; //Detected peaks threshold for speaking recognition
+int SPR=10; //Detected peaks threshold for speaking recognition
 long silence_threshold = 10000; //if silence for 6 sec -> BREAK_ICE
-long random_threshold = 15000; //if talking after 8 sec -> NOISE
+long random_threshold = 12000; //if talking after 8 sec -> NOISE
 long mic_th=0; //contains mic threshold
-bool MICMONITOR = false; //DEBUG print mic graph
+bool MICMONITOR = true; //DEBUG print mic graph
 
 //Jokes
 //int SPECIFIC_MOVEMENT; //movement to do according to a verse. Possibility of delay
@@ -49,9 +49,10 @@ int verses_num=6;
 int verses_init = NUMLANG*jokes_per_lang +1;
 
 //Movements
-bool MOVEMENTSSERIAL = true; //DEBUG play movements from serial
+bool MOVEMENTSSERIAL = false; //DEBUG play movements from serial
 bool MOVEPLAYING = false; //robot is moving
 bool MOVEMONITOR = false; //DEBUG plot movements on serial monitor
+int MOVENUM = 5;
 
 bool PRINTROBOT = false; //DEBUG print state variables
 
@@ -73,6 +74,7 @@ void setup() {
     jokesSetup();
     movementsSetup();
     volumeButtonsSetup();
+      MIC_STATE=true;
 }
 
 void loop() {
@@ -107,11 +109,12 @@ void loop() {
     //Serial.print("|");
     Serial.println("|");
   }
-    //mouthLoop();
-    //microphoneLoop();
-    //jokesLoop();
+    mouthLoop();
+      MIC_STATE=true;
+    microphoneLoop();
+    jokesLoop();
     movementsLoop();
-    //volumeButtonsLoop();
+    volumeButtonsLoop();
   }
 
 void rst(){

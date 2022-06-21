@@ -7,8 +7,8 @@
 //long tt=0;
 
 #define TH_SAMPLES 200
-float mic_proportional = 2.4;
-float mic_offset = 20;
+float mic_proportional = 2;
+float mic_offset = 15;
 
 const int numReadings  = 10;
 int readings[numReadings];
@@ -129,7 +129,7 @@ void Mic::dyn_th(){
    mic_th = smooth();
    
    //mic_th = pow(mic_th, 2);
-   mic_th = (long)(((float)mic_th * mic_proportional)+(mic_offset*mic_proportional*mic_th/100)); //supposing uniform distribution of noise, *1.8 should be ok (+80%) 
+   mic_th = (long)(((float)mic_th * mic_proportional)+(mic_offset*10/mic_th)); //supposing uniform distribution of noise, *1.8 should be ok (+80%) 
    //mic_th = abs(mic_th); 
    //mic_th = pow(mic_th, 2);
 }
