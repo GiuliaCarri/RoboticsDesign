@@ -46,7 +46,7 @@ void movementsLoop(){
   if(Serial.available()){
     int input = Serial.read()-48;
     Serial.println(input);
-    if(input < 9){
+    if((input < 9)&&(input>-1)){
       MOVEPLAYING = true;
       recording = false;
       choice = input;
@@ -66,11 +66,11 @@ void movementsLoop(){
     currAngle[1] = *movements[choice*4+1];
     currAngle[2] = *movements[choice*4+2];
     currAngle[3] = *movements[choice*4+3];
-    Serial.print(currAngle[0]);
-    Serial.print(", ");
-    Serial.print(currAngle[1]);
-    Serial.print(", ");
-    Serial.println(currAngle[2]);
+    //Serial.print(currAngle[0]);
+    //Serial.print(", ");
+    //Serial.print(currAngle[1]);
+    //Serial.print(", ");
+    //Serial.println(currAngle[2]);
     SPECIFICMOVE = -1;
     prevTimeDelay = millis();
   }
@@ -79,19 +79,21 @@ void movementsLoop(){
     if(currTime - prevTimeDelay > MOVEDELAY){ //wait to start movement
       if(!ptr){
         prevTime10 = currTime;
-        ptr = movements[choice*4];
+        ptr = movements[0*4];
       }
       if(repeat < arraySizes[choice] - 1){
         float deltaTimeMov = (float)(currTime - prevTime10);
         if((deltaTimeMov >= 10)&&MOVEPLAYING){
           for(int i=0; i<4; i++){
-          currAngle[i] += float(*(movements[choice*4+i]+repeat+1)-*(movements[choice*4+i]+repeat))/10 * (float)(deltaTimeMov/10);
           if(i==3){
             if(!MOUTH_BUSY){
               mouth.write(180-int(currAngle[i]));
             }
           }
-          joints[i].write(180-int(currAngle[i]));
+          else{
+            currAngle[i] += float(*(movements[choice*4+i]+repeat+1)-*(movements[choice*4+i]+repeat))/10 * (float)(deltaTimeMov/10);
+            joints[i].write(180-int(currAngle[i]));
+          }
           if((currTime - prevTime >= 100)){
             repeat++;
             ptr++;

@@ -16,10 +16,11 @@ int TTH= 700;
 long mm=0;
 
 int speech=0;
+int noisemagnitude = 20;
+int mic_noise = 0;
 
 void microphoneSetup() {
   
-  MIC_STATE=true;
   mic.dyn_th();
   mic_th = mic.mic_th;
   t2=millis();
@@ -47,9 +48,7 @@ void microphoneLoop() {
  if(MIC_STATE==true){
 
   
-  Serial.println("ecco");
-  //Serial.print(mic_th);
-  //Serial.print(",");
+  //Serial.println("ecco");
   //Serial.print(mic_th);
   //Serial.print(",");
   //Serial.print(pow(mic_th+DELTA,2));
@@ -64,7 +63,17 @@ void microphoneLoop() {
     else {mm=50000;
   }*/
    mm= mic.ReadVol();
-   //Serial.println(mm);
+   if(MICMONITOR){
+      Serial.print(mic_th);
+      Serial.print(",");
+      Serial.print(mic_noise);
+      Serial.print(",");
+      Serial.print(SPR*5);
+      Serial.print(",");
+      Serial.print(speech*5);
+      Serial.print(",");
+       Serial.println(mm);
+   }
   /*
   uint32_t mm = mic.ReadVol();
   if (mm<10000 && mm >-10000){Serial.println (abs(mm));}
@@ -72,11 +81,15 @@ void microphoneLoop() {
   //Serial.println (abs(mvol));
   if ((mm>mic_th)){
     speech++;
+    //if(speech > SPR + 3){
+    //  speech = 0;
+    //}
     }
   //Serial.println (mvol);
 if((speech>=SPR) && ((millis()-t2)> random_threshold)){//speaking detected
   t2=millis();
   //Serial.println("talking");
+  //mic_noise = 1*noisemagnitude;
   NOISE=true;
   BREAK_ICE=false;
   MIC_STATE=false;
@@ -86,8 +99,9 @@ if((speech>=SPR) && ((millis()-t2)> random_threshold)){//speaking detected
 if((speech<SPR) && ((millis()-t2)> silence_threshold)){//silence detected
   t2=millis();
   //Serial.println("silence");
-  BREAK_ICE=true;
+  //mic_noise = 0.5*noisemagnitude;
   NOISE=false;
+  BREAK_ICE=true;
   MIC_STATE=false;
   speech=0;
   }

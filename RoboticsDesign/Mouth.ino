@@ -80,7 +80,7 @@ void mouthLoop(){
    if((openMouth)){ //c'era già :p AGGIUNTO CONTROLLO BUSY PIN, VEDI SE SMETTE DI TREMARE. LOW=PLAYING
     mouthCooldown = MOUTHCOOLDOWN;
     mouth.write(mouthZero-(int)(float)maxMouthAngle*((float)VOLUME/30));
-    MOUTH_STATE = true;
+    //Serial.println("SPEAK");
     openMouth = false;
    }
     if(currTimeMouth - prevTimeMouth >= 10){
@@ -90,7 +90,6 @@ void mouthLoop(){
     
     if(mouthCooldown <= 0){
     mouth.write(mouthZero);
-    MOUTH_STATE = false;
     }
     //Serial.print(",");
    }

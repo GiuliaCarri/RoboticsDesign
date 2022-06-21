@@ -3,7 +3,7 @@
 //TODO declare dictionary that maps joke name to number
 //1-15 italian jokes reading BREAK ICE
 //16-30 english jokes reading BREAK ICE
-//31-38 verses reading NOISE
+//31-36 verses reading NOISE
 
 //PLAY JOKES AND IN CASE THE ASSOCIATED MOVEMENTS (SET SPECIFIC MOVEMENTS WITH DELAY)
 
@@ -19,13 +19,12 @@ void jokesLoop(){
     joke= randomize(verses_init, verses_init + verses_num -1);
 
     player.play(joke);
-    SPECIFICMOVE = joke;
-    MOVEDELAY = 0; //SPOSTARE NEL MAIN
+    //SPECIFICMOVE = joke;
+    //MOVEDELAY = 0; //SPOSTARE NEL MAIN
     //fare movements
 
-    t2=millis();
+    
     NOISE=false;
-    //MIC_STATE=true;
   }
 
   //if silence, play jokes and specific movements
@@ -34,17 +33,17 @@ void jokesLoop(){
     joke= randomize(lang*jokes_per_lang +1, lang*jokes_per_lang + jokes_per_lang);
 
     player.play(joke);
+    SPECIFICMOVE = joke;
     //fare movements
     
-    t2=millis();
+    
     BREAK_ICE=false;
-    //MIC_STATE=true;
   }
-  if(!MOUTH_BUSY && !MOVEPLAYING){
+  if(PHRASE_FINISHED){// && !MOVEPLAYING){
     MIC_STATE=true;
-  }
-  if(PHRASE_FINISHED && false){
-    SPECIFICMOVE = -1;//KERMIT TURN, MOUTH OPEN TO START LAUGHING ECC
+    PHRASE_FINISHED = false;
+    SPECIFICMOVE = -1;
+    t2=millis();
   }
 }
 
