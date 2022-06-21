@@ -20,7 +20,7 @@ void jokesLoop(){
   if(NOISE){
     joke= randomize(verses_init, verses_init + verses_num -1);
     jokes_i=randomize(0, 20);
-    moves= randomize(0, 3);
+    moves= randomize(0, 2);
     if (jokes_i<8){
       player.play(joke);
       //MOVEDELAY = 0;
@@ -45,7 +45,7 @@ void jokesLoop(){
     
     BREAK_ICE=false;
     if(PHRASE_FINISHED){// && !MOVEPLAYING){
-    Serial.print("FRASE FINITA\nFRASE FINITA\nFRASE FINITA\nFRASE FINITA\nFRASE FINITA");
+    //Serial.print("FRASE FINITA\nFRASE FINITA\nFRASE FINITA\nFRASE FINITA\nFRASE FINITA");
       MIC_STATE=true;
       PHRASE_FINISHED = false;
       SPECIFICMOVE = randomize(3,4); //TODO NON SEMPRE
@@ -57,10 +57,7 @@ void jokesLoop(){
   }
 }
 
-int getJoke(char* joke){
-  //translate joke name into int ID (?)
-  return 1;
-}
+
 
 int randomize(int from, int to){
   

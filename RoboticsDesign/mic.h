@@ -7,7 +7,7 @@
 //long tt=0;
 
 #define TH_SAMPLES 200
-float mic_proportional = 2;
+float mic_proportional = 2.2;
 float mic_offset = 15;
 
 const int numReadings  = 10;

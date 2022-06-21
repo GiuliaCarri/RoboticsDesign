@@ -39,7 +39,7 @@ Servo mouth;
 bool PHRASE_FINISHED = false; //true when speaker just finished playing
 
 //Buttons
-int VOLUME = 9;
+int VOLUME = 3;
 
 int lang=0; //language audio dfplayer
 int NUMLANG=2; //#languages until now
